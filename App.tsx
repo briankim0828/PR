@@ -20,7 +20,11 @@ import BottomNavbar from "./src/components/BottomNavbar";
 import ActiveWorkoutModal from "./src/components/ActiveWorkoutModal";
 import LoginScreen from "./src/screens/LoginScreen";
 import { supabase } from "./src/utils/supabaseClient";
-import { TouchableWithoutFeedback, Keyboard, View, StyleSheet } from "react-native";
+import { TouchableWithoutFeedback, Keyboard, View, StyleSheet, LogBox } from "react-native";
+import ExerciseSelectionView from "./src/components/ExerciseSelectionView";
+
+// Ignore specific warning about text strings
+LogBox.ignoreLogs(['Text strings must be rendered within a <Text> component.']);
 
 // Active Workout Modal Component
 const ActiveWorkoutModalContainer = () => {
@@ -84,6 +88,7 @@ type RootStackParamList = {
   Progress: undefined;
   Profile: undefined;
   Login: undefined;
+  ExerciseSelectionModalScreen: undefined;
 };
 
 type TabType = "workout" | "progress" | "profile";
@@ -175,9 +180,18 @@ const NavigationWrapper = () => {
           }}
           initialRouteName="Progress"
         >
-          <Stack.Screen name="Workout" component={WorkoutMain} />
-          <Stack.Screen name="Progress" component={ProgressScreen} />
-          <Stack.Screen name="Profile" component={ProfileScreen} />
+          <Stack.Group>
+            <Stack.Screen name="Workout" component={WorkoutMain} />
+            <Stack.Screen name="Progress" component={ProgressScreen} />
+            <Stack.Screen name="Profile" component={ProfileScreen} />
+          </Stack.Group>
+
+          <Stack.Group screenOptions={{ presentation: 'modal', headerShown: false }}>
+            <Stack.Screen
+              name="ExerciseSelectionModalScreen"
+              component={ExerciseSelectionView}
+            />
+          </Stack.Group>
         </Stack.Navigator>
       </Box>
       
